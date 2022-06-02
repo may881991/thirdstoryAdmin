@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600&display=swap');
+
+body {
+  box-sizing:border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: var(--global-font-family);
+  color: var(--global-text-color);
+}
+
+:root {
+  --global-font-family: 'Mulish', sans-serif;;
+  --global-text-color: #515151;
+  --global-color-main: #102E46;
+  --global-color-lightblue: #E9FBFF;
+  --global-color-header: #1A6FB5;
+  --global-color-white: #ffffff;
+  --global-color-pale-white: #9b9b9b; /*Please name the variant, I don't know*/
+}
+
+.btn.btn-primary{
+  background-color: var(--global-color-main) !important;
+}
