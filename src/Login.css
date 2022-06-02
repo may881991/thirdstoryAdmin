@@ -1,0 +1,22 @@
+body{
+    background: #102E46 !important;
+    color:white;
+}
+.container{
+    height: 100vh;
+}
+#loginForm{
+    background: #fff;
+    border-radius: 8px;
+}
+#loginForm .form-control{
+    font-size: 	0.875rem;
+    height: 42px;
+    border-radius: 8px;
+}
+.btn.loginBtn{
+    height: 48px;
+    width: 120px;
+    border-radius: 8px;
+    margin-top: 15px;
+}

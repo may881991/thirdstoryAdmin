@@ -5,8 +5,8 @@ import {
   Route,
 } from "react-router-dom";
 import LogIn from "../LogIn/Login";
+import SignUp from "../SignUp/SignUp";
 import Dashboard from '../Dashboard/Dashboard';
-import Login from '../LogIn/Login';
 
 function getToken(){
   const tokenString = sessionStorage.getItem('token');
@@ -40,6 +40,8 @@ class App extends Component{
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LogIn />}> </Route>
+            <Route path="/SignUp" element={<SignUp />}> </Route>
+            <Route path="/Dashboard" element={<Dashboard />}> </Route>
           </Routes>
         </BrowserRouter>
       );
@@ -47,7 +49,8 @@ class App extends Component{
       return(
           <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LogIn />}> </Route>
+            <Route path="/" element={<Dashboard />}> </Route>
+            <Route path="/SignUp" element={<SignUp />}> </Route>
             <Route path="/Dashboard" element={<Dashboard />}> </Route>
           </Routes>
         </BrowserRouter>
