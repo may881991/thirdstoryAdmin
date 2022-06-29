@@ -40,8 +40,8 @@ class App extends Component{
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LogIn />}> </Route>
-            <Route path="/SignUp" element={<SignUp />}> </Route>
-            <Route path="/Dashboard" element={<Dashboard />}> </Route>
+            <Route path="/signup" element={<SignUp />}> </Route>
+            <Route path="/dashboard" element={<Dashboard />}> </Route>
           </Routes>
         </BrowserRouter>
       );
@@ -50,8 +50,8 @@ class App extends Component{
           <BrowserRouter>
           <Routes>
             <Route path="/" element={<Dashboard />}> </Route>
-            <Route path="/SignUp" element={<SignUp />}> </Route>
-            <Route path="/Dashboard" element={<Dashboard />}> </Route>
+            <Route path="/signup" element={<SignUp />}> </Route>
+            <Route path="/dashboard" element={<Dashboard />}> </Route>
           </Routes>
         </BrowserRouter>
       );
