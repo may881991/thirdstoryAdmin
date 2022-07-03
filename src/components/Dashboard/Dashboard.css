@@ -127,3 +127,7 @@ td label{
   font-weight: 600;
   color: #252733;
 }
+.editIcon svg{
+  width: 1.5em;
+  height: 1.5em;
+}

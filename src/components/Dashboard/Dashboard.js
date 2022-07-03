@@ -1,14 +1,24 @@
 import React, {useEffect , useState} from 'react';
 import { getBookData } from '../../firebase.js';
 import { Navbar, Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
-import { BiBook , BiBulb, BiDotsVerticalRounded} from "react-icons/bi";
-import CreateBook from "../Create/Create";
+import { BiBook , BiBulb, BiEdit} from "react-icons/bi";
+import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
 import logo from "./../../assets/images/Logo.png";
 
 export default function Dashboard() {
   const { bookdata } = GetBookLists();
-  console.log(bookdata)
+  const [showModal, setShowModal] = useState(false);
+  const [status, setStatus] = useState("create");
+  const [bookInfo, setData] = useState({});
+
+  function editBookInfo(book){
+    let getBookInfo = book.data;
+    setShowModal(true)
+    setStatus("edit")
+    setData(bookInfo => ({...bookInfo,...getBookInfo}));
+  }
+
   return(
     <Container fluid className='p-0'>
         <Row>
@@ -30,9 +40,9 @@ export default function Dashboard() {
                 <h3 className='p-3 mx-4'>Books</h3>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
-                  <Navbar.Text>
+                  {/* <Navbar.Text>
                     Signed in as: <a href="#login">Mark Otto</a>
-                  </Navbar.Text>
+                  </Navbar.Text> */}
                 </Navbar.Collapse>
             </Navbar>
             <Container className='book-container'>
@@ -41,7 +51,8 @@ export default function Dashboard() {
                   <h5 className='py-3'>All Books</h5>
                 </Col>
                 <Col md={3} className="d-flex align-items-center justify-content-end">
-                  <CreateBook />
+                  <Button variant="primary"  onClick={() => setShowModal(true)}>Create Book</Button>
+                  <BookModal show={showModal} close={() => setShowModal(false)} status={status} book={bookInfo}/>
                 </Col>
               </Row>
               <Table hover>
@@ -60,7 +71,7 @@ export default function Dashboard() {
                         <td><label>{data.author}</label></td>
                         <td><label>{data.date}</label></td>
                         <td><label>{data.language}</label></td>
-                        <td><BiDotsVerticalRounded/> </td>
+                        <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
                       </tr>
                   ))}
                 </tbody>
