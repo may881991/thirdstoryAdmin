@@ -39,10 +39,10 @@ function Login() {
           <Button variant="primary" type="submit" className='loginBtn' onClick={() => signInWithEmailAndPassword(auth, email, password)}>
               Log in
           </Button>
-          <Button className="login__btn login__google" onClick={signInWithGoogle}>
+          {/* <Button className="login__btn login__google" onClick={signInWithGoogle}>
           Login with Google
-        </Button>
-          <p className='py-3'>Don’t have an account? <Link to="/register">Sign up Here!</Link></p>
+        </Button> */}
+          <p className='py-3 text-dark'>Don’t have an account? <Link to="/register">Sign up Here!</Link></p>
       </div>
     </div>
     </Container>

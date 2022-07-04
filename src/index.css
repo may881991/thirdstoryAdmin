@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600&display=swap');
+@font-face {
+  font-family: "Myanmar Sans Pro";
+  src: url("./assets/fonts/MyanmarSansPro-Regular.ttf") format("truetype");
+  }
 
 body {
   box-sizing:border-box;

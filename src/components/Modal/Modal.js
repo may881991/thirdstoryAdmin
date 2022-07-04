@@ -1,22 +1,23 @@
 import React, { useState} from 'react';
 import { Modal, Button , Form} from "react-bootstrap";
-import { storage , addBookData} from '../../firebase.js';
+import { storage , addBookData, updateBookInfo} from '../../firebase.js';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "./Modal.css"
 
-const Create = (props) => {
-    console.log(props)
-    const bookInfo = props.book;
+const Create = (props) => { 
+    const bookInfo = props.book;  
     const [booktitle, setTitle] = useState("");
+    const [bookEngtitle, setEngTitle] = useState("");
     const [bookauthor, setAuthor] = useState("");
+    const [bookEngauthor, setEngAuthor] = useState("");
     const [bookIllustrator, setIllustrator] = useState("");
+    const [bookEngIllustrator, setEngIllustrator] = useState("");
     const [bookPrice, setPrice] = useState(0);
     const [bookISBN, setISBN] = useState("");
-    const [bookLang, setLang] = useState(0);
-    const handleClose = props.close;
+    const [bookLang, setLang] = useState("");
     const [coverUrl, setImageUrl] = useState(null);
     const [pdfUrl, setPdfUrl] = useState(null);
-
+    const handleClose = props.close;  
     const current = new Date();
     const date = `${current.getMonth()+1}/${current.getDate()}/${current.getFullYear()}`;
 
@@ -42,9 +43,22 @@ const Create = (props) => {
     }
 
     const createBook = () => {
-        handleClose();
-        console.log(booktitle, bookauthor, bookIllustrator, bookPrice, bookISBN, coverUrl , pdfUrl , bookLang, date)
-        // addBookData(booktitle, bookauthor, bookIllustrator, bookPrice, bookISBN, coverUrl , pdfUrl , bookLang, date);
+        addBookData(booktitle, bookEngtitle,  bookauthor, bookEngauthor, bookIllustrator, bookEngIllustrator, bookPrice, bookISBN, coverUrl , pdfUrl , bookLang, date);
+        handleClose(); 
+    }
+
+    const updatebookInfo = () => { 
+        let uptitle = booktitle === "" ? bookInfo.title : booktitle;
+        let upEngtitle = bookEngtitle === "" ? bookInfo.titleEng : bookEngtitle; 
+        let upAuthor = bookauthor === "" ? bookInfo.author : bookauthor; 
+        let upEngAuthor = bookEngauthor === "" ? bookInfo.authorEng : bookEngauthor; 
+        let upIllustrator = bookIllustrator === "" ? bookInfo.illustrator : bookIllustrator;
+        let upEngIllustrator = bookEngIllustrator === "" ? bookInfo.illustratorEng : bookEngIllustrator;
+        let upPrice = bookPrice === 0 ? bookInfo.price : bookPrice;
+        let upISBN = bookISBN === "" ? bookInfo.ISBN : bookISBN;
+        let upLang = bookLang === "" ? bookInfo.language : bookLang;
+        updateBookInfo(uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date);
+        handleClose(); 
     }
 
     return(
@@ -58,9 +72,17 @@ const Create = (props) => {
                 <Form.Group className="mb-4 row">
                     <Form.Label className='col-md-4'>Book Name : <strong>*</strong></Form.Label>
                     {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book name" defaultValue={bookInfo.title} onChange={e => setTitle(e.target.value)}/>
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title" defaultValue={bookInfo.title} onChange={e => setTitle(e.target.value)}/>
                     ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book name" onChange={e => setTitle(e.target.value)}/>
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title" onChange={e => setTitle(e.target.value)}/>
+                    )}
+                </Form.Group>
+                <Form.Group className="mb-4 row">
+                    <Form.Label className='col-md-4'>Book Name English: <strong>*</strong></Form.Label>
+                    {props.status === "edit" ? (
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title English" defaultValue={bookInfo.titleEng} onChange={e => setEngTitle(e.target.value)}/>
+                    ) : (
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title English" onChange={e => setEngTitle(e.target.value)}/>
                     )}
                 </Form.Group>
                 <Form.Group className="mb-4 row">
@@ -72,11 +94,27 @@ const Create = (props) => {
                     )}
                 </Form.Group>
                 <Form.Group className="mb-4 row">
+                    <Form.Label className='col-md-4'>Author English: <strong>*</strong></Form.Label>
+                    {props.status === "edit" ? (
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" defaultValue={bookInfo.authorEng}  onChange={e => setEngAuthor(e.target.value)}/>
+                    ) : (
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" onChange={e => setEngAuthor(e.target.value)}/>
+                    )}
+                </Form.Group>
+                <Form.Group className="mb-4 row">
                     <Form.Label className='col-md-4'>Illustrator :  <strong>*</strong></Form.Label>
                     {props.status === "edit" ? (
                         <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" defaultValue={bookInfo.illustrator} onChange={e => setIllustrator(e.target.value)}/>
                     ) : (
                         <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" onChange={e => setIllustrator(e.target.value)}/>
+                    )}
+                </Form.Group>
+                <Form.Group className="mb-4 row">
+                    <Form.Label className='col-md-4'>Illustrator English :  <strong>*</strong></Form.Label>
+                    {props.status === "edit" ? (
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" defaultValue={bookInfo.illustratorEng} onChange={e => setEngIllustrator(e.target.value)}/>
+                    ) : (
+                        <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" onChange={e => setEngIllustrator(e.target.value)}/>
                     )}
                 </Form.Group>
                 <Form.Group className="mb-4 row">
@@ -119,7 +157,7 @@ const Create = (props) => {
         </Modal.Body>
         <Modal.Footer>
                 {props.status === "edit" ? (
-                    <Button variant="primary" onClick={createBook}> Update Book </Button>
+                    <Button variant="primary" onClick={updatebookInfo}> Update Book </Button>
                 ) : (
                     <Button variant="primary" onClick={createBook}> Create Book </Button>
                 )}

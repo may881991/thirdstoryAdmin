@@ -6,11 +6,25 @@ import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
 import logo from "./../../assets/images/Logo.png";
 
-export default function Dashboard() {
-  const { bookdata } = GetBookLists();
+function Dashboard(){  
+  // const { bookdata } = GetBookLists();
+  const [bookdata , getData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [status, setStatus] = useState("create");
   const [bookInfo, setData] = useState({});
+
+  useEffect(() => {
+    getBookData().then((lists) => {
+      console.log("Dashboard")
+      console.log(lists.docs)
+      var arrBook = [];
+      lists.forEach((ele) => {
+        arrBook.push(ele.data());
+      });
+      getData(arrBook);
+    }).catch((err) => console.log(err));
+  }, []);
+  console.log(bookdata)
 
   function editBookInfo(book){
     let getBookInfo = book.data;
@@ -82,17 +96,4 @@ export default function Dashboard() {
     </Container>
   );
 }
-
-function GetBookLists() {
-  let [bookdata , setData] = useState([]);
-  useEffect(() => {
-    getBookData().then((lists) => {
-      lists.forEach((ele) => {
-        var data = ele.data();
-        setData(arr => [...arr , data]);
-        // setIsLoading(false);
-      });
-    }).catch((err) => console.log(err));
-  }, []);
-  return { bookdata };
-}
+export default Dashboard;

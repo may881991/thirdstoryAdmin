@@ -1,21 +1,6 @@
 import { initializeApp } from "firebase/app";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  signInWithPopup,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut,
-} from "firebase/auth";
-import {
-  getFirestore,
-  query,
-  getDocs,
-  collection,
-  where,
-  addDoc,
-} from "firebase/firestore";
+import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
+import { doc, getFirestore, query, getDocs, collection, where, addDoc, updateDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -91,12 +76,15 @@ const logout = () => {
   signOut(auth);
 };
 
-const addBookData = async (booktitle, author, illust , price, isbn, coverUrl, pdfUrl, lang, createdDate ) =>{
+const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, coverUrl, pdfUrl, lang, createdDate ) =>{
   try{
     await addDoc(collection(db, "books"), {
-      title: booktitle,
+      title: booktTitle,
+      titleEng: bookEngTitle,
       author: author,
+      authorEng: authorEng,
       illustrator: illust,
+      illustratorEng: illustEng,
       price: price,
       bookCover: coverUrl,
       bookUrl: pdfUrl,
@@ -104,6 +92,36 @@ const addBookData = async (booktitle, author, illust , price, isbn, coverUrl, pd
       ISBN : isbn,
       date : createdDate
     });
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+const updateBookInfo = async (booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate ) => {
+  console.log(booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate)
+  try{
+    const userdb = query(collection(db, "books"), where("title", "==", booktTitle));
+    const getData =  await getDocs(userdb);
+    console.log(getData)
+    getData.forEach((ele) => { 
+      const bookDoc = doc(db, "books", ele.id);
+      updateDoc(bookDoc, { 
+        title: booktTitle,
+        titleEng: bookEngTitle,
+        author: author,
+        authorEng: authorEng,
+        illustrator: illust,
+        illustratorEng: illustEng,
+        price: price, 
+        language: lang,
+        ISBN : isbn,
+        date : createdDate
+      }).then(() => {
+        console.log("updated bookInfo")
+      }).catch((error) => {
+        console.log(error)
+      });
+    }); 
   }catch(err){
     console.error(err.message)
   }
@@ -130,5 +148,6 @@ export {
   sendPasswordReset,
   logout,
   getBookData,
-  addBookData
+  addBookData,
+  updateBookInfo
 };
