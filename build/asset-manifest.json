@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.044c10e8.css",
+    "main.js": "/static/js/main.8878afd5.js",
+    "static/js/787.3ce4cc4d.chunk.js": "/static/js/787.3ce4cc4d.chunk.js",
+    "static/media/MyanmarSansPro-Regular.ttf": "/static/media/MyanmarSansPro-Regular.59ba68ee758f95de9ef7.ttf",
+    "static/media/Logo.png": "/static/media/Logo.9c628d78d4968306ef9f.png",
+    "index.html": "/index.html",
+    "main.044c10e8.css.map": "/static/css/main.044c10e8.css.map",
+    "main.8878afd5.js.map": "/static/js/main.8878afd5.js.map",
+    "787.3ce4cc4d.chunk.js.map": "/static/js/787.3ce4cc4d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.044c10e8.css",
+    "static/js/main.8878afd5.js"
+  ]
+}

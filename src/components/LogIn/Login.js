@@ -42,7 +42,7 @@ function Login() {
           {/* <Button className="login__btn login__google" onClick={signInWithGoogle}>
           Login with Google
         </Button> */}
-          <p className='py-3 text-dark'>Don’t have an account? <Link to="/register">Sign up Here!</Link></p>
+          <p className='py-3 text-dark'>Don’t have an account? <Link to="/signUp">Sign up Here!</Link></p>
       </div>
     </div>
     </Container>
