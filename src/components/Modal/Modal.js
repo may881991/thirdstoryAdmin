@@ -1,7 +1,8 @@
 import React, { useState} from 'react';
 import { Modal, Button , Form} from "react-bootstrap";
 import { storage , addBookData, updateBookInfo} from '../../firebase.js';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
+import Loading from '../Loading/Loading';
 import "./Modal.css"
 
 const Create = (props) => { 
@@ -20,6 +21,7 @@ const Create = (props) => {
     const handleClose = props.close;  
     const current = new Date();
     const date = `${current.getMonth()+1}/${current.getDate()}/${current.getFullYear()}`;
+    const [loading, setLoading] = useState(false)
 
     const setCoverUpload = (imageUpload) => {
         if (imageUpload === null ) return;
@@ -43,8 +45,13 @@ const Create = (props) => {
     }
 
     const createBook = () => {
-        addBookData(booktitle, bookEngtitle,  bookauthor, bookEngauthor, bookIllustrator, bookEngIllustrator, bookPrice, bookISBN, coverUrl , pdfUrl , bookLang, date);
-        handleClose(); 
+        setLoading(true)
+        addBookData(booktitle, bookEngtitle,  bookauthor, bookEngauthor, bookIllustrator, bookEngIllustrator, bookPrice, bookISBN, coverUrl , pdfUrl , bookLang, date).then((res) => { 
+            console.log(res);
+            handleClose(); 
+            setLoading(false);
+            window.location.reload();
+        }); 
     }
 
     const updatebookInfo = () => { 
@@ -57,113 +64,119 @@ const Create = (props) => {
         let upPrice = bookPrice === 0 ? bookInfo.price : bookPrice;
         let upISBN = bookISBN === "" ? bookInfo.ISBN : bookISBN;
         let upLang = bookLang === "" ? bookInfo.language : bookLang;
-        updateBookInfo(uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date);
-        handleClose(); 
+        updateBookInfo(uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date).then((res) => { 
+            console.log(res);
+            handleClose(); 
+        });
     }
 
     return(
         <>
-        <Modal show={props.show} centered  size="lg">
-        <Modal.Header closeButton onClick={props.close}>
-          <Modal.Title>Add New Book</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Book Name : <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title" defaultValue={bookInfo.title} onChange={e => setTitle(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title" onChange={e => setTitle(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Book Name English: <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title English" defaultValue={bookInfo.titleEng} onChange={e => setEngTitle(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title English" onChange={e => setEngTitle(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Author : <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" defaultValue={bookInfo.author}  onChange={e => setAuthor(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" onChange={e => setAuthor(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Author English: <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" defaultValue={bookInfo.authorEng}  onChange={e => setEngAuthor(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" onChange={e => setEngAuthor(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Illustrator :  <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" defaultValue={bookInfo.illustrator} onChange={e => setIllustrator(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" onChange={e => setIllustrator(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Illustrator English :  <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" defaultValue={bookInfo.illustratorEng} onChange={e => setEngIllustrator(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator" onChange={e => setEngIllustrator(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Price <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="number" placeholder="Enter Price" defaultValue={bookInfo.price} onChange={e => setPrice(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="number" placeholder="Enter Price" onChange={e => setPrice(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>ISBN <strong>*</strong></Form.Label>
-                    {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter ISBN" defaultValue={bookInfo.ISBN}  onChange={e => setISBN(e.target.value)}/>
-                    ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter ISBN"  onChange={e => setISBN(e.target.value)}/>
-                    )}
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Upload Cover:<strong>*</strong></Form.Label>
-                    <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
-                      <Form.Control type="file" onChange={(e) => {setCoverUpload(e.target.files[0]);}}/>
+          {loading === false ? (
+            <Modal show={props.show} centered  size="lg">
+            <Modal.Header closeButton onClick={props.close}>
+            <Modal.Title>Add New Book</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Book Name English: <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title English" defaultValue={bookInfo.titleEng} onChange={e => setEngTitle(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title English" onChange={e => setEngTitle(e.target.value)}/>
+                        )}
                     </Form.Group>
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Upload PDF:<strong>*</strong></Form.Label>
-                    <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
-                      <Form.Control type="file" onChange={(e) => {setPdfUpload(e.target.files[0]);}}/>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Book Name : <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title" defaultValue={bookInfo.title} onChange={e => setTitle(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Book Title" onChange={e => setTitle(e.target.value)}/>
+                        )}
                     </Form.Group>
-                </Form.Group>
-                <Form.Group className="mb-4 row">
-                    <Form.Label className='col-md-4'>Language :  <strong>*</strong></Form.Label>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Author English: <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Author English name" defaultValue={bookInfo.authorEng}  onChange={e => setEngAuthor(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" onChange={e => setEngAuthor(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Author : <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" defaultValue={bookInfo.author}  onChange={e => setAuthor(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Author name" onChange={e => setAuthor(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Illustrator English :  <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter English Illustrator Name" defaultValue={bookInfo.illustratorEng} onChange={e => setEngIllustrator(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter English Illustrator Name" onChange={e => setEngIllustrator(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Illustrator :  <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator Name" defaultValue={bookInfo.illustrator} onChange={e => setIllustrator(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Illustrator Name" onChange={e => setIllustrator(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Price <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="number" placeholder="Enter Price" defaultValue={bookInfo.price} onChange={e => setPrice(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="number" placeholder="Enter Price" onChange={e => setPrice(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>ISBN <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter ISBN" defaultValue={bookInfo.ISBN}  onChange={e => setISBN(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter ISBN"  onChange={e => setISBN(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Upload Cover:<strong>*</strong></Form.Label>
+                        <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
+                        <Form.Control type="file" onChange={(e) => {setCoverUpload(e.target.files[0]);}}/>
+                        </Form.Group>
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Upload PDF:<strong>*</strong></Form.Label>
+                        <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
+                        <Form.Control type="file" onChange={(e) => {setPdfUpload(e.target.files[0]);}}/>
+                        </Form.Group>
+                    </Form.Group>
+                    <Form.Group className="mb-4 row">
+                        <Form.Label className='col-md-4'>Language :  <strong>*</strong></Form.Label>
+                        {props.status === "edit" ? (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Language" defaultValue={bookInfo.language} onChange={e => setLang(e.target.value)}/>
+                        ) : (
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Language" onChange={e => setLang(e.target.value)}/>
+                        )}
+                    </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
                     {props.status === "edit" ? (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Language" defaultValue={bookInfo.language} onChange={e => setLang(e.target.value)}/>
+                        <Button variant="primary" onClick={updatebookInfo}> Update Book </Button>
                     ) : (
-                        <Form.Control className='col-md-8' type="text" placeholder="Enter Language" onChange={e => setLang(e.target.value)}/>
+                        <Button variant="primary" onClick={createBook}> Create Book </Button>
                     )}
-                </Form.Group>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-                {props.status === "edit" ? (
-                    <Button variant="primary" onClick={updatebookInfo}> Update Book </Button>
-                ) : (
-                    <Button variant="primary" onClick={createBook}> Create Book </Button>
-                )}
-        </Modal.Footer>
-      </Modal>
-      </>
+            </Modal.Footer>
+            </Modal>
+        ) : (
+            <Loading />
+        )}
+        </>
     )
 }
 

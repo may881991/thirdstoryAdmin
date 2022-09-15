@@ -91,6 +91,12 @@ const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,
       language: lang,
       ISBN : isbn,
       date : createdDate
+    }).then(() => {
+      console.log("Successfull created bookInfo")
+      return "Successfull created bookInfo";
+    }).catch((error) => {
+      console.log(error)
+      return error;
     });
   }catch(err){
     console.error(err.message)

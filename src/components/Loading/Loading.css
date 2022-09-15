@@ -1,0 +1,10 @@
+.loading{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--global-color-white);
+}
+.text-info{
+    color: var(--global-color-main) !important;
+}
