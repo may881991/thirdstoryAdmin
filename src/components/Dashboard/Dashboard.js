@@ -55,25 +55,17 @@ function Dashboard(){
                 </Nav.Item>
               </Nav>
               <Col lg={10} md={9} className="ms-sm-auto px-md-4">
-                <Navbar>
-                    <h3 className='p-3 mx-4'>Books</h3>
-                    <Navbar.Toggle />
-                    <Navbar.Collapse className="justify-content-end">
-                      {/* <Navbar.Text>
-                        Signed in as: <a href="#login">Mark Otto</a>
-                      </Navbar.Text> */}
-                    </Navbar.Collapse>
-                </Navbar>
+                
+                <Row className="flex-nowrap justify-content-between">
+                  <Col md={2}>
+                    <h5 className='py-3'>All Books</h5>
+                  </Col>
+                  <Col md={3} className="d-flex align-items-center justify-content-end">
+                    <Button variant="primary"  onClick={() => setShowModal(true)}>Create Book</Button>
+                    <BookModal show={showModal} close={() => setShowModal(false)} status={status} book={bookInfo}/>
+                  </Col>
+                </Row>
                 <Container className='book-container'>
-                  <Row className="flex-nowrap justify-content-between">
-                    <Col md={2}>
-                      <h5 className='py-3'>All Books</h5>
-                    </Col>
-                    <Col md={3} className="d-flex align-items-center justify-content-end">
-                      <Button variant="primary"  onClick={() => setShowModal(true)}>Create Book</Button>
-                      <BookModal show={showModal} close={() => setShowModal(false)} status={status} book={bookInfo}/>
-                    </Col>
-                  </Row>
                   <Table hover>
                     <thead>
                       <tr>

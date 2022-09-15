@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 import { Modal, Button , Form} from "react-bootstrap";
 import { storage , addBookData, updateBookInfo} from '../../firebase.js';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
-import Loading from '../Loading/Loading';
 import "./Modal.css"
 
 const Create = (props) => { 
@@ -21,7 +20,6 @@ const Create = (props) => {
     const handleClose = props.close;  
     const current = new Date();
     const date = `${current.getMonth()+1}/${current.getDate()}/${current.getFullYear()}`;
-    const [loading, setLoading] = useState(false)
 
     const setCoverUpload = (imageUpload) => {
         if (imageUpload === null ) return;
@@ -45,11 +43,9 @@ const Create = (props) => {
     }
 
     const createBook = () => {
-        setLoading(true)
         addBookData(booktitle, bookEngtitle,  bookauthor, bookEngauthor, bookIllustrator, bookEngIllustrator, bookPrice, bookISBN, coverUrl , pdfUrl , bookLang, date).then((res) => { 
             console.log(res);
             handleClose(); 
-            setLoading(false);
             window.location.reload();
         }); 
     }
@@ -72,7 +68,6 @@ const Create = (props) => {
 
     return(
         <>
-          {loading === false ? (
             <Modal show={props.show} centered  size="lg">
             <Modal.Header closeButton onClick={props.close}>
             <Modal.Title>Add New Book</Modal.Title>
@@ -173,9 +168,6 @@ const Create = (props) => {
                     )}
             </Modal.Footer>
             </Modal>
-        ) : (
-            <Loading />
-        )}
         </>
     )
 }
