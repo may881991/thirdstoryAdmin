@@ -5,6 +5,7 @@ import Register from "./components/Register/Register";
 // import Reset from "./Reset";
 import SignUP from "./components/SignUp/SignUp";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Activities from "./components/Activities/Activities";
 function App() {
   return (
     <div className="app">
@@ -14,6 +15,7 @@ function App() {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/signUp" element={<SignUP />} />
           <Route exact path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/activities" element={<Activities />} />
         </Routes>
       </Router>
     </div>

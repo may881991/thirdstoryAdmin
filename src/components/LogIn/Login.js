@@ -19,7 +19,7 @@ function Login() {
   }, [user, loading]);
   return (
 
-    <Container className='d-flex'>
+    <Container className='d-flex login-container'>
     <div id='loginForm' className='col-md-5 m-auto p-3 align-items-center'>
       <div className="text-center">
           <img alt={logo} src={logo}/>

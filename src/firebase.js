@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { doc, getFirestore, query, getDocs, collection, where, addDoc, updateDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDilgOKBP1iFC1y3rmz1K7kOQbzv_YrgE0",
@@ -123,7 +124,8 @@ const updateBookInfo = async (booktTitle, bookEngTitle, author, authorEng, illus
         ISBN : isbn,
         date : createdDate
       }).then(() => {
-        console.log("updated bookInfo")
+        console.log("updated bookInfo"); 
+        window.location.reload();
       }).catch((error) => {
         console.log(error)
       });
@@ -143,6 +145,62 @@ const getBookData = async ()=>{
   }
 }
 
+const getActivitiesData = async ()=>{
+  try{
+    const activityDb = collection(db, "activities");
+    const getData =  await getDocs(activityDb);
+    return getData;
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+const createActivity = async (title, dec, imgUrl, date) => { 
+  const generateUuid = uuidv4();
+  const getUuid = generateUuid.replaceAll('-', '');
+  console.log("getUuid " + getUuid)
+  try {
+    await addDoc(collection(db, "activities"), {
+      id: getUuid,
+      title: title,
+      description : dec,
+      image: imgUrl,
+      createdDate : date
+    }).then(() => {
+      return "Successfull created activitiy.";
+    }).catch((error) => {
+      console.log(error)
+      return error;
+    });
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
+
+const updateActivity = async ( actId,title, dec, date) => {
+  try{
+    const activitydb = query(collection(db, "activities"), where("id", "==", actId));
+    const getData =  await getDocs(activitydb);
+    getData.forEach((ele) => { 
+      const actDoc = doc(db, "activities", ele.id);
+      updateDoc(actDoc, { 
+        title: title,
+        description : dec,
+        date : date
+      }).then(() => {
+        console.log("updated activity Info");
+        window.location.reload();
+      }).catch((error) => {
+        console.log(error)
+        return error;
+      });
+    }); 
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
 export {
   auth,
   db,
@@ -155,5 +213,8 @@ export {
   logout,
   getBookData,
   addBookData,
-  updateBookInfo
+  updateBookInfo,
+  createActivity,
+  getActivitiesData,
+  updateActivity
 };

@@ -60,10 +60,9 @@ const Create = (props) => {
         let upPrice = bookPrice === 0 ? bookInfo.price : bookPrice;
         let upISBN = bookISBN === "" ? bookInfo.ISBN : bookISBN;
         let upLang = bookLang === "" ? bookInfo.language : bookLang;
-        updateBookInfo(uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date).then((res) => { 
-            console.log(res);
-            handleClose(); 
-        });
+        updateBookInfo(uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date);
+        handleClose(); 
+        window.location.reload();
     }
 
     return(

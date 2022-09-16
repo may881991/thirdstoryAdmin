@@ -1,39 +1,37 @@
 import React, {useEffect , useState} from 'react';
-import { getBookData } from '../../firebase.js';
+import { getActivitiesData } from '../../firebase.js';
 import { Navbar, Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
 import { BiBook , BiBulb, BiEdit} from "react-icons/bi";
-import BookModal from "../Modal/Modal";
-import "./Dashboard.css";
+import ActivityModal from "../ActivitiesModal/ActivitiesModal";
+import "./Activities.css";
 import Loading from '../Loading/Loading';
 import logo from "./../../assets/images/Logo.png";
 
-function Dashboard(){  
+function Activities(){  
   // const { bookdata } = GetBookLists(); 
   const [loading, setLoading] = useState(true)
-  const [bookdata , getData] = useState([]);
+  const [activitiyLists , addData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [status, setStatus] = useState("create");
-  const [bookInfo, setData] = useState({});
+  const [activityInfo, setData] = useState({});
 
   useEffect(() => {
-    getBookData().then((lists) => {
-      console.log("Dashboard")
-      console.log(lists.docs)
-      var arrBook = [];
+    getActivitiesData().then((lists) => {
+      var arrActivity = [];
       lists.forEach((ele) => {
-        arrBook.push(ele.data());
+        arrActivity.push(ele.data());
       });
-      getData(arrBook);
+      addData(arrActivity);
       setLoading(false);
     }).catch((err) => console.log(err));
   }, []);
-  console.log(bookdata)
+  console.log(activitiyLists)
 
-  function editBookInfo(book){
-    let getBookInfo = book.data;
+  function editActivityInfo(activity){
+    let getActInfo = activity.data;
     setShowModal(true)
     setStatus("edit")
-    setData(bookInfo => ({...bookInfo,...getBookInfo}));
+    setData(actInfo => ({...actInfo,...getActInfo}));
   }
 
   return(
@@ -41,7 +39,7 @@ function Dashboard(){
       {loading === false ? (
         <Container fluid className='p-0'>
             <Row>
-              <Nav variant="pills" className="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" defaultActiveKey="/dashboard">
+              <Nav variant="pills" className="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" defaultActiveKey="/activities">
                 <Nav.Item>
                 <div className="text-center mb-3">
                     <img alt={logo} src={logo} className="logo"/>
@@ -58,11 +56,11 @@ function Dashboard(){
                 <Container>
                   <Row className="flex-nowrap justify-content-between">
                     <Col md={2}>
-                      <h5 className='py-3'>All Books</h5>
+                      <h5 className='py-3'>All Activities</h5>
                     </Col>
                     <Col md={3} className="d-flex align-items-center justify-content-end">
-                      <Button variant="primary"  onClick={() => setShowModal(true)}>Create Book</Button>
-                      <BookModal show={showModal} close={() => setShowModal(false)} status={status} book={bookInfo}/>
+                      <Button variant="primary"  onClick={() => setShowModal(true)}>Create Activities</Button>
+                      <ActivityModal show={showModal} close={() => setShowModal(false)} status={status} activity={activityInfo}/>
                     </Col>
                   </Row>
                 </Container>
@@ -70,21 +68,21 @@ function Dashboard(){
                   <Table hover>
                     <thead>
                       <tr>
-                        <th>Book Details</th>
-                        <th>Author</th>
+                        <th>Title</th>
+                        <th>Photo</th>
+                        <th>Description</th>
                         <th>Created Date</th>
-                        <th>Language</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                        {bookdata.map((data) =>(
-                          <tr key={data.ISBN} className="bookRow">
-                            <td><img src={data.bookCover} className="thubnail"/> <label>{data.title}</label></td>
-                            <td><label>{data.author}</label></td>
-                            <td><label>{data.date}</label></td>
-                            <td><label>{data.language}</label></td>
-                            <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
+                        {activitiyLists.map((data, index) =>(
+                          <tr key={index} className="bookRow">
+                            <td className='col-md-2'><label>{data.title}</label></td>
+                            <td className='col-md-3'><img src={data.image}/></td>
+                            <td className='col-md-6'><label>{data.description}</label></td>
+                            <td className='col-md-1 text-end'><label>{data.createdDate}</label></td>
+                            <td className='editIcon'> <BiEdit onClick={() => editActivityInfo({data})}/></td>
                           </tr>
                       ))}
                     </tbody>
@@ -99,4 +97,4 @@ function Dashboard(){
       </>
   );
 }
-export default Dashboard;
+export default Activities;

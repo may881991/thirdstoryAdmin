@@ -26,7 +26,7 @@ export default function SignUP() {
     }, [user, loading]);
 
     return (
-        <Container className='d-flex'>
+        <Container className='d-flex login-container'>
             <Form id='loginForm' onSubmit={Register} className='col-md-5 m-auto p-3 align-items-center'>
                 <div className="text-center">
                     <img alt={logo} src={logo}/>
