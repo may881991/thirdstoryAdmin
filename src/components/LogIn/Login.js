@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container , Form, Button } from 'react-bootstrap';
-import { auth, signInWithEmailAndPassword, signInWithGoogle } from "../../firebase.js";
+import { auth, signInWithEmailAndPassword } from "../../firebase.js";
 import { useAuthState } from "react-firebase-hooks/auth";
 import logo from "./../../assets/images/Logo.png";
 import "./Login.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
+  console.log(user)
   const navigate = useNavigate();
   useEffect(() => {
     if (loading) {
@@ -17,6 +18,7 @@ function Login() {
     }
     if (user) navigate("/dashboard");
   }, [user, loading]);
+
   return (
 
     <Container className='d-flex login-container'>
@@ -38,10 +40,7 @@ function Login() {
       <div className="text-center">
           <Button variant="primary" type="submit" className='loginBtn' onClick={() => signInWithEmailAndPassword(auth, email, password)}>
               Log in
-          </Button>
-          {/* <Button className="login__btn login__google" onClick={signInWithGoogle}>
-          Login with Google
-        </Button> */}
+          </Button> 
           <p className='py-3 text-dark'>Don’t have an account? <Link to="/signUp">Sign up Here!</Link></p>
       </div>
     </div>

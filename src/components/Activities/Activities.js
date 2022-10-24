@@ -1,7 +1,7 @@
 import React, {useEffect , useState} from 'react';
-import { getActivitiesData } from '../../firebase.js';
-import { Navbar, Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
-import { BiBook , BiBulb, BiEdit} from "react-icons/bi";
+import { getActivitiesData , logout} from '../../firebase.js';
+import { Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
+import { BiBook , BiBulb, BiEdit, BiLogOut} from "react-icons/bi";
 import ActivityModal from "../ActivitiesModal/ActivitiesModal";
 import "./Activities.css";
 import Loading from '../Loading/Loading';
@@ -51,6 +51,9 @@ function Activities(){
                 <Nav.Item>
                   <Nav.Link href="/activities"><BiBulb />Activities</Nav.Link>
                 </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link href="/" onClick={logout}><BiLogOut />Sign Out</Nav.Link>
+                </Nav.Item>
               </Nav>
               <Col lg={10} md={9} className="ms-sm-auto px-md-4">
                 <Container>
@@ -79,12 +82,12 @@ function Activities(){
                         {activitiyLists.map((data, index) =>(
                           <tr key={index} className="bookRow">
                             <td className='col-md-2'><label>{data.title}</label></td>
-                            <td className='col-md-3'><img src={data.image}/></td>
+                            <td className='col-md-3'><img src={data.image} alt={data.image}/></td>
                             <td className='col-md-6'><label>{data.description}</label></td>
                             <td className='col-md-1 text-end'><label>{data.createdDate}</label></td>
                             <td className='editIcon'> <BiEdit onClick={() => editActivityInfo({data})}/></td>
                           </tr>
-                      ))}
+                        ))}
                     </tbody>
                   </Table>
                 </Container>

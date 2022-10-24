@@ -75,6 +75,8 @@ const sendPasswordReset = async (email) => {
 
 const logout = () => {
   signOut(auth);
+  localStorage.removeItem("user");
+  setTimeout(() => window.location.reload("/"), 2000);
 };
 
 const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, coverUrl, pdfUrl, lang, createdDate ) =>{
@@ -165,7 +167,7 @@ const createActivity = async (title, dec, imgUrl, date) => {
       title: title,
       description : dec,
       image: imgUrl,
-      createdDate : date
+      date : date
     }).then(() => {
       return "Successfull created activitiy.";
     }).catch((error) => {

@@ -1,7 +1,7 @@
 import React, {useEffect , useState} from 'react';
-import { getBookData } from '../../firebase.js';
-import { Navbar, Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
-import { BiBook , BiBulb, BiEdit} from "react-icons/bi";
+import { getBookData, logout } from '../../firebase.js';
+import { Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
+import { BiBook , BiBulb, BiEdit, BiLogOut} from "react-icons/bi";
 import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
 import Loading from '../Loading/Loading';
@@ -34,8 +34,7 @@ function Dashboard(){
     setShowModal(true)
     setStatus("edit")
     setData(bookInfo => ({...bookInfo,...getBookInfo}));
-  }
-
+  } 
   return(
     <>
       {loading === false ? (
@@ -52,6 +51,9 @@ function Dashboard(){
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link href="/activities"><BiBulb />Activities</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link href="/" onClick={logout}><BiLogOut />Sign Out</Nav.Link>
                 </Nav.Item>
               </Nav>
               <Col lg={10} md={9} className="ms-sm-auto px-md-4">
@@ -80,7 +82,7 @@ function Dashboard(){
                     <tbody>
                         {bookdata.map((data) =>(
                           <tr key={data.ISBN} className="bookRow">
-                            <td><img src={data.bookCover} className="thubnail"/> <label>{data.title}</label></td>
+                            <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/> <label>{data.title}</label></td>
                             <td><label>{data.author}</label></td>
                             <td><label>{data.date}</label></td>
                             <td><label>{data.language}</label></td>
