@@ -72,17 +72,19 @@ function Dashboard(){
                   <Table hover>
                     <thead>
                       <tr>
-                        <th>Book Details</th>
-                        <th>Author</th>
-                        <th>Created Date</th>
-                        <th>Language</th>
+                        <th><strong>Cover</strong></th>
+                        <th><strong>Title</strong></th>
+                        <th><strong>Author</strong></th>
+                        <th><strong>Created Date</strong></th>
+                        <th><strong>Language</strong></th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
                         {bookdata.map((data) =>(
                           <tr key={data.ISBN} className="bookRow">
-                            <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/> <label>{data.title}</label></td>
+                            <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/></td>
+                            <td><label>{data.title}</label></td>
                             <td><label>{data.author}</label></td>
                             <td><label>{data.date}</label></td>
                             <td><label>{data.language}</label></td>

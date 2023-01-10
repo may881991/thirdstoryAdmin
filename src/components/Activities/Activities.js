@@ -74,7 +74,7 @@ function Activities(){
                         <th>Title</th>
                         <th>Photo</th>
                         <th>Description</th>
-                        <th>Created Date</th>
+                        <th>Date</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -84,7 +84,7 @@ function Activities(){
                             <td className='col-md-2'><label>{data.title}</label></td>
                             <td className='col-md-3'><img src={data.image} alt={data.image}/></td>
                             <td className='col-md-6'><label>{data.description}</label></td>
-                            <td className='col-md-1 text-end'><label>{data.createdDate}</label></td>
+                            <td className='col-md-1 text-end'><label>{data.date}</label></td>
                             <td className='editIcon'> <BiEdit onClick={() => editActivityInfo({data})}/></td>
                           </tr>
                         ))}

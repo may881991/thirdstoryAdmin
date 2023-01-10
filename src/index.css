@@ -40,3 +40,7 @@ code {
 .btn.btn-primary{
   background-color: var(--global-color-main) !important;
 }
+
+th{
+  font-size: 1rem;
+}

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   auth,
-  registerWithEmailAndPassword,
-  signInWithGoogle,
+  registerWithEmailAndPassword
 } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { Container , Form, Button } from 'react-bootstrap';
@@ -14,7 +13,7 @@ export default function SignUP() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
-    const [user, loading, error] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const navigate = useNavigate();
     const Register = () => {
         if (!name) alert("Please enter name");
@@ -22,7 +21,9 @@ export default function SignUP() {
     };
     useEffect(() => {
         if (loading) return;
-        if (user) navigate("/dashboard");
+        if (user){
+            navigate("/dashboard");
+        }
     }, [user, loading]);
 
     return (
