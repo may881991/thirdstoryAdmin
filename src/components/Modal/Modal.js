@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { Modal, Button , Form} from "react-bootstrap";
+import { Modal, Button , Form, Col} from "react-bootstrap";
 import { storage , addBookData, updateBookInfo} from '../../firebase.js';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; 
 import "./Modal.css"
@@ -62,7 +62,7 @@ const Create = (props) => {
         let upLang = bookLang === "" ? bookInfo.language : bookLang;
         updateBookInfo(bookInfo.id, uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date);
         handleClose(); 
-        // window.location.reload();
+        window.location.reload();
     }
 
     return(
@@ -137,18 +137,29 @@ const Create = (props) => {
                             <Form.Control className='col-md-8' type="text" placeholder="Enter ISBN"  onChange={e => setISBN(e.target.value)}/>
                         )}
                     </Form.Group>
-                    <Form.Group className="mb-4 row">
-                        <Form.Label className='col-md-4'>Upload Cover:<strong>*</strong></Form.Label>
-                        <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
-                        <Form.Control type="file" onChange={(e) => {setCoverUpload(e.target.files[0]);}}/>
+                        {props.status === "edit" ? (
+                            <Form.Group className="mb-4 row">
+                                <Form.Label className='col-md-4'>Cover Image:</Form.Label>
+                                <Col md={8} className="p-0">
+                                    <img src={bookInfo.bookCover} className="border w-25" alt={bookInfo.bookCover} />
+                                </Col>
+                            </Form.Group>
+                        ) : ( 
+                            <Form.Group className="mb-4 row">
+                                <Form.Label className='col-md-4'>Upload Cover:<strong>*</strong></Form.Label>
+                                <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
+                                    <Form.Control type="file" onChange={(e) => {setCoverUpload(e.target.files[0]);}}/>
+                                </Form.Group>
+                            </Form.Group>
+                        )}
+                    {props.status === "create" && ( 
+                        <Form.Group className="mb-4 row">
+                            <Form.Label className='col-md-4'>Upload PDF:<strong>*</strong></Form.Label>
+                                <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
+                                    <Form.Control type="file" onChange={(e) => {setPdfUpload(e.target.files[0]);}}/>
+                                </Form.Group>
                         </Form.Group>
-                    </Form.Group>
-                    <Form.Group className="mb-4 row">
-                        <Form.Label className='col-md-4'>Upload PDF:<strong>*</strong></Form.Label>
-                        <Form.Group controlId="formFileSm" className="col-md-8 fileInput">
-                        <Form.Control type="file" onChange={(e) => {setPdfUpload(e.target.files[0]);}}/>
-                        </Form.Group>
-                    </Form.Group>
+                    )}
                     <Form.Group className="mb-4 row">
                         <Form.Label className='col-md-4'>Language :  <strong>*</strong></Form.Label>
                         {props.status === "edit" ? (

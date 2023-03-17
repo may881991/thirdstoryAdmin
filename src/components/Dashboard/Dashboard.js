@@ -29,10 +29,10 @@ function Dashboard(){
       setLoading(false);
     }).catch((err) => console.log(err));
   }, []);
-  console.log(bookdata)
 
   function editBookInfo(book){
     let getBookInfo = book.data;
+    console.log(getBookInfo)
     setShowModal(true)
     setStatus("edit")
     setData(bookInfo => ({...bookInfo,...getBookInfo}));
