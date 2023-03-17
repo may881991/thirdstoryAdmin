@@ -80,8 +80,12 @@ const logout = () => {
 };
 
 const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, coverUrl, pdfUrl, lang, createdDate ) =>{
+  const generatebookUuid = uuidv4();
+  const getbookUuid = generatebookUuid.replaceAll('-', '');
+  console.log("getUuid " + getbookUuid)
   try{
     await addDoc(collection(db, "books"), {
+      id: getbookUuid,
       title: booktTitle,
       titleEng: bookEngTitle,
       author: author,
@@ -106,10 +110,10 @@ const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,
   }
 }
 
-const updateBookInfo = async (booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate ) => {
-  console.log(booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate)
+const updateBookInfo = async (bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate ) => {
+  console.log(bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate)
   try{
-    const userdb = query(collection(db, "books"), where("title", "==", booktTitle));
+    const userdb = query(collection(db, "books"), where("id", "==", bookId));
     const getData =  await getDocs(userdb);
     console.log(getData)
     getData.forEach((ele) => { 

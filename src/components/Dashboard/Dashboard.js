@@ -1,6 +1,6 @@
 import React, {useEffect , useState} from 'react';
 import { getBookData, logout } from '../../firebase.js';
-import { Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
+import { Container , Row, Nav, Col ,Table , Button, Form} from "react-bootstrap";
 import { BiBook , BiBulb, BiEdit, BiLogOut} from "react-icons/bi";
 import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
@@ -14,14 +14,16 @@ function Dashboard(){
   const [showModal, setShowModal] = useState(false);
   const [status, setStatus] = useState("create");
   const [bookInfo, setData] = useState({});
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
     getBookData().then((lists) => {
       console.log("Dashboard")
       console.log(lists.docs)
       var arrBook = [];
-      lists.forEach((ele) => {
-        arrBook.push(ele.data());
+      lists.forEach((ele) => {  
+        arrBook.push(ele.data()); 
       });
       getData(arrBook);
       setLoading(false);
@@ -35,6 +37,20 @@ function Dashboard(){
     setStatus("edit")
     setData(bookInfo => ({...bookInfo,...getBookInfo}));
   } 
+  const searchItems = (searchValue) => {
+    console.log(searchValue)
+      setSearchInput(searchValue)
+      if (searchInput !== '') {
+          const filteredData = bookdata.filter((item) => {
+              return Object.values(item).join('').toLowerCase().includes(searchInput.toLowerCase())
+          })
+          setFilteredResults(filteredData)
+      }
+      else{
+          setFilteredResults(bookdata)
+      }
+  }
+
   return(
     <>
       {loading === false ? (
@@ -62,6 +78,11 @@ function Dashboard(){
                     <Col md={2}>
                       <h5 className='py-3'>All Books</h5>
                     </Col>
+                    <Col md={7} className='py-3'>
+                      <Form id='search' className='p-1 col-md-10 mx-auto'>
+                          <Form.Control type="email" placeholder="Search book titles and keywords" className='text-center'  onChange={(e) => searchItems(e.target.value)}/>
+                      </Form>
+                    </Col>
                     <Col md={3} className="d-flex align-items-center justify-content-end">
                       <Button variant="primary"  onClick={() => setShowModal(true)}>Create Book</Button>
                       <BookModal show={showModal} close={() => setShowModal(false)} status={status} book={bookInfo}/>
@@ -81,7 +102,24 @@ function Dashboard(){
                       </tr>
                     </thead>
                     <tbody>
-                        {bookdata.map((data) =>(
+                    {searchInput.length > 1 ? (
+                      <>
+                          {filteredResults.map((data) => {
+                              return (
+                                <tr key={data.ISBN} className="bookRow">
+                                  <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/></td>
+                                  <td><label>{data.title}</label></td>
+                                  <td><label>{data.author}</label></td>
+                                  <td><label>{data.date}</label></td>
+                                  <td><label>{data.language}</label></td>
+                                  <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
+                                </tr>
+                              )
+                          })}
+                      </>
+                ) : (
+                    <> 
+                      {bookdata.map((data) =>(
                           <tr key={data.ISBN} className="bookRow">
                             <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/></td>
                             <td><label>{data.title}</label></td>
@@ -91,6 +129,8 @@ function Dashboard(){
                             <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
                           </tr>
                       ))}
+                    </>
+                )}
                     </tbody>
                   </Table>
                 </Container>
