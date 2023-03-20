@@ -1,4 +1,4 @@
-import React, {useEffect , useState} from 'react';
+import React, {useEffect , useState, Fragment} from 'react';
 import { getBookData, logout } from '../../firebase.js';
 import { Container , Row, Nav, Col ,Table , Button, Form} from "react-bootstrap";
 import { BiBook , BiBulb, BiEdit, BiLogOut} from "react-icons/bi";
@@ -6,6 +6,7 @@ import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
 import Loading from '../Loading/Loading';
 import logo from "./../../assets/images/Logo.png";
+import Data from 'react-data-pagination';
 
 function Dashboard(){  
   // const { bookdata } = GetBookLists(); 
@@ -50,7 +51,41 @@ function Dashboard(){
           setFilteredResults(bookdata)
       }
   }
+  const DataContainer = () => {
+    return(
+      <thead>
+        <tr>
+          <th><strong>Cover</strong></th>
+          <th><strong>Title</strong></th>
+          <th><strong>Author</strong></th>
+          <th><strong>Created Date</strong></th>
+          <th><strong>Language</strong></th>
+          <th></th>
+        </tr>
+      </thead>
+    );
+};
 
+  const DataList = (props) => { 
+    const dataset = props.dataset;
+    return(
+        <Fragment>
+            <tbody> 
+              {dataset.map((data) =>(
+                  <tr key={data.ISBN} className="bookRow">
+                    <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/></td>
+                    <td><label>{data.title}</label></td>
+                    <td><label>{data.author}</label></td>
+                    <td><label>{data.date}</label></td>
+                    <td><label>{data.language}</label></td>
+                    <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
+                  </tr>
+              ))}
+            </tbody>
+        </Fragment>
+    );
+
+};
   return(
     <>
       {loading === false ? (
@@ -91,16 +126,6 @@ function Dashboard(){
                 </Container>
                 <Container className='book-container'>
                   <Table hover>
-                    <thead>
-                      <tr>
-                        <th><strong>Cover</strong></th>
-                        <th><strong>Title</strong></th>
-                        <th><strong>Author</strong></th>
-                        <th><strong>Created Date</strong></th>
-                        <th><strong>Language</strong></th>
-                        <th></th>
-                      </tr>
-                    </thead>
                     <tbody>
                     {searchInput.length > 1 ? (
                       <>
@@ -119,16 +144,16 @@ function Dashboard(){
                       </>
                 ) : (
                     <> 
-                      {bookdata.map((data) =>(
-                          <tr key={data.ISBN} className="bookRow">
-                            <td><img src={data.bookCover} alt="thumbnail" className="thubnail"/></td>
-                            <td><label>{data.title}</label></td>
-                            <td><label>{data.author}</label></td>
-                            <td><label>{data.date}</label></td>
-                            <td><label>{data.language}</label></td>
-                            <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
-                          </tr>
-                      ))}
+                      <Data
+                        dataset={bookdata}
+                        offset={0}
+                        rows={5}
+                        dataBody={DataContainer}
+                        dataList={DataList}
+                        wrapper="table"
+                        wrapperCssClass="striped"
+                        buttonCssClass="button"
+                      />
                     </>
                 )}
                     </tbody>

@@ -123,7 +123,7 @@ body {
 .bookRow{
   vertical-align: middle;
 }
-td label{
+.striped label{
   font-weight: 600;
   color: #252733;
 }
@@ -141,4 +141,25 @@ td label{
 }
 .nav-pills .nav-link{
   border-radius: unset;
+}
+.striped{
+  width: 100%;
+}
+.striped th{
+  padding: 10px 5px;
+}
+.bookRow{
+  border-bottom: 1px solid #999;
+}
+.bookRow td{
+  padding: 10px;
+}
+
+.button{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.table ul{
+  margin-top: 20px;
 }
