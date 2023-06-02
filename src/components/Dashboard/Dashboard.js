@@ -1,12 +1,12 @@
 import React, {useEffect , useState, Fragment} from 'react';
-import { getBookData, logout } from '../../firebase.js';
-import { Container , Row, Nav, Col ,Table , Button, Form} from "react-bootstrap";
-import { BiBook , BiBulb, BiEdit, BiLogOut} from "react-icons/bi";
+import { getBookData } from '../../firebase.js';
+import { Container , Row, Col ,Table , Button, Form} from "react-bootstrap";
+import { BiEdit} from "react-icons/bi";
 import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
-import Loading from '../Loading/Loading';
-import logo from "./../../assets/images/Logo.png";
+import Loading from '../Loading/Loading'; 
 import Data from 'react-data-pagination';
+import Sidebar from '../Sidebar/Sidebar.js';
 
 function Dashboard(){  
   // const { bookdata } = GetBookLists(); 
@@ -91,27 +91,12 @@ function Dashboard(){
       {loading === false ? (
         <Container fluid className='p-0'>
             <Row>
-              <Nav variant="pills" className="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" defaultActiveKey="/dashboard">
-                <Nav.Item>
-                <div className="text-center mb-3">
-                    <img alt={logo} src={logo} className="logo"/>
-                </div>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="/dashboard"><BiBook /> Books</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="/activities"><BiBulb />Activities</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="/" onClick={logout}><BiLogOut />Sign Out</Nav.Link>
-                </Nav.Item>
-              </Nav>
+              <Sidebar />
               <Col lg={10} md={9} className="ms-sm-auto px-md-4">
                 <Container>
                   <Row className="flex-nowrap justify-content-between">
                     <Col md={2}>
-                      <h5 className='py-3'>All Books</h5>
+                      <h5 className='p-3'>All Books</h5>
                     </Col>
                     <Col md={7} className='py-3'>
                       <Form id='search' className='p-1 col-md-10 mx-auto'>
@@ -119,7 +104,7 @@ function Dashboard(){
                       </Form>
                     </Col>
                     <Col md={3} className="d-flex align-items-center justify-content-end">
-                      <Button variant="primary"  onClick={() => setShowModal(true)}>Create Book</Button>
+                      <Button variant="primary"  onClick={() => {setShowModal(true); setStatus("create")}}>Create Book</Button>
                       <BookModal show={showModal} close={() => setShowModal(false)} status={status} book={bookInfo}/>
                     </Col>
                   </Row>

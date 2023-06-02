@@ -1,14 +1,13 @@
 import React, {useEffect , useState} from 'react';
-import { getActivitiesData , logout} from '../../firebase.js';
-import { Container , Row, Nav, Col ,Table , Button} from "react-bootstrap";
-import { BiBook , BiBulb, BiEdit, BiLogOut} from "react-icons/bi";
+import { getActivitiesData } from '../../firebase.js';
+import { Container , Row,  Col ,Table , Button} from "react-bootstrap";
+import { BiEdit} from "react-icons/bi";
 import ActivityModal from "../ActivitiesModal/ActivitiesModal";
 import "./Activities.css";
-import Loading from '../Loading/Loading';
-import logo from "./../../assets/images/Logo.png";
+import Loading from '../Loading/Loading'; 
+import Sidebar from '../Sidebar/Sidebar.js';
 
-function Activities(){  
-  // const { bookdata } = GetBookLists(); 
+function Activities(){   
   const [loading, setLoading] = useState(true)
   const [activitiyLists , addData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -39,30 +38,15 @@ function Activities(){
       {loading === false ? (
         <Container fluid className='p-0'>
             <Row>
-              <Nav variant="pills" className="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" defaultActiveKey="/activities">
-                <Nav.Item>
-                <div className="text-center mb-3">
-                    <img alt={logo} src={logo} className="logo"/>
-                </div>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="/dashboard"><BiBook /> Books</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="/activities"><BiBulb />Activities</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link href="/" onClick={logout}><BiLogOut />Sign Out</Nav.Link>
-                </Nav.Item>
-              </Nav>
+              <Sidebar />
               <Col lg={10} md={9} className="ms-sm-auto px-md-4">
                 <Container>
                   <Row className="flex-nowrap justify-content-between">
                     <Col md={2}>
-                      <h5 className='py-3'>All Activities</h5>
+                      <h5 className='p-3'>All Activities</h5>
                     </Col>
                     <Col md={3} className="d-flex align-items-center justify-content-end">
-                      <Button variant="primary"  onClick={() => setShowModal(true)}>Create Activities</Button>
+                      <Button variant="primary"  onClick={() => {setShowModal(true); setStatus("create")}}>Create Activities</Button>
                       <ActivityModal show={showModal} close={() => setShowModal(false)} status={status} activity={activityInfo}/>
                     </Col>
                   </Row>

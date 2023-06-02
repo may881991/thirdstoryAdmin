@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
-import { doc, getFirestore, query, getDocs, collection, where, addDoc, updateDoc } from "firebase/firestore";
+import { doc, getFirestore, query, getDocs, collection, where, addDoc, setDoc , updateDoc, deleteDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -207,6 +207,70 @@ const updateActivity = async ( actId,title, dec, date) => {
   }
 }
 
+const createStory = async (title, link, date) => { 
+  const generateUuid = uuidv4();
+  const getstoryUuid = generateUuid.replaceAll('-', '');
+  console.log("getUuid " + getstoryUuid)
+  try {
+    const storyData = {
+      id: getstoryUuid,
+      title: title,
+      url : link,
+      date : date
+    }
+    await setDoc(doc(db, "stories", getstoryUuid), storyData).then(() => {
+      return "Successfull created story.";
+    }).catch((error) => {
+      console.log(error)
+      return error;
+    });
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
+
+const getStoriesData = async ()=>{
+  try{
+    const storiesDb = collection(db, "stories");
+    const getStoriesData =  await getDocs(storiesDb);
+    return getStoriesData;
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+const updateStory = async (storyId ,title, url, date) => {
+  try{
+    const storydb = query(collection(db, "stories"), where("id", "==", storyId ));
+    const getData =  await getDocs(storydb);
+    getData.forEach((ele) => { 
+      const actDoc = doc(db, "stories", ele.id);
+      updateDoc(actDoc, { 
+        title: title,
+        description : url,
+        date : date
+      }).then(() => {
+        console.log("updated activity Info");
+        window.location.reload();
+      }).catch((error) => {
+        console.log(error)
+        return error;
+      });
+    }); 
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+const deleteStory = async (storyId) => {
+  await deleteDoc(doc(db, "stories", storyId)).then(() => {
+    return "Story successfully deleted!";
+  }).catch((error) => {
+    console.error("Error removing document: ", error);
+  });
+}
+
 export {
   auth,
   db,
@@ -222,5 +286,9 @@ export {
   updateBookInfo,
   createActivity,
   getActivitiesData,
-  updateActivity
+  updateActivity,
+  createStory,
+  getStoriesData,
+  updateStory,
+  deleteStory
 };
