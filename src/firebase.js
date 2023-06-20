@@ -113,8 +113,8 @@ const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,
 const updateBookInfo = async (bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate ) => {
   console.log(bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , price, isbn, lang, createdDate)
   try{
-    const userdb = query(collection(db, "books"), where("id", "==", bookId));
-    const getData =  await getDocs(userdb);
+    const bookDb = query(collection(db, "books"), where("id", "==", bookId));
+    const getData =  await getDocs(bookDb);
     console.log(getData)
     getData.forEach((ele) => { 
       const bookDoc = doc(db, "books", ele.id);
@@ -146,6 +146,24 @@ const getBookData = async ()=>{
     const bookDb = collection(db, "books");
     const getData =  await getDocs(bookDb);
     return getData;
+  }catch(err){
+    console.error(err.message)
+  }
+}
+
+const deleteBook = async (bookId) => {
+  try{ 
+    const bookCollection = query(collection(db, "books"), where("id", "==", bookId));
+    const getData =  await getDocs(bookCollection);
+    console.log(getData)
+    getData.forEach((ele) => { 
+      console.log(ele.id)
+      deleteDoc(doc(db, "books", ele.id)).then(() => {
+        window.location.reload();
+      }).catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+  }); 
   }catch(err){
     console.error(err.message)
   }
@@ -284,6 +302,7 @@ export {
   getBookData,
   addBookData,
   updateBookInfo,
+  deleteBook,
   createActivity,
   getActivitiesData,
   updateActivity,

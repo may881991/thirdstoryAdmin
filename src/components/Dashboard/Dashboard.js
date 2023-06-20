@@ -1,7 +1,7 @@
 import React, {useEffect , useState, Fragment} from 'react';
-import { getBookData } from '../../firebase.js';
-import { Container , Row, Col ,Table , Button, Form} from "react-bootstrap";
-import { BiEdit} from "react-icons/bi";
+import { deleteBook, getBookData } from '../../firebase.js';
+import { Container , Row, Col ,Table , Button, Form, Modal} from "react-bootstrap";
+import { BiEdit, BiTrash} from "react-icons/bi"; 
 import BookModal from "../Modal/Modal";
 import "./Dashboard.css";
 import Loading from '../Loading/Loading'; 
@@ -17,6 +17,8 @@ function Dashboard(){
   const [bookInfo, setData] = useState({});
   const [filteredResults, setFilteredResults] = useState([]);
   const [searchInput, setSearchInput] = useState('');
+  const [showDelete, setShow] = useState(false);
+  const [delBookData, setDeleteData] = useState({});
 
   useEffect(() => {
     getBookData().then((lists) => {
@@ -51,6 +53,16 @@ function Dashboard(){
           setFilteredResults(bookdata)
       }
   }
+
+  function deleteBookInfo() {
+    let delData = delBookData.data;
+    console.log(delData) 
+    setShow(false)
+    deleteBook(delData.id).then(() => {
+        setData(filteredResults.filter((item) => item.id !== delData.id));
+    });
+}
+
   const DataContainer = () => {
     return(
       <thead>
@@ -78,7 +90,10 @@ function Dashboard(){
                     <td><label>{data.author}</label></td>
                     <td><label>{data.date}</label></td>
                     <td><label>{data.language}</label></td>
-                    <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
+                    <td className='editIcon'> 
+                      <BiEdit fill='#102E46' className='me-3' onClick={() => editBookInfo({data})}/>
+                      <BiTrash fill='#FF0100' onClick={() => {setShow(true); setDeleteData({ data })}} />
+                    </td>
                   </tr>
               ))}
             </tbody>
@@ -122,7 +137,10 @@ function Dashboard(){
                                   <td><label>{data.author}</label></td>
                                   <td><label>{data.date}</label></td>
                                   <td><label>{data.language}</label></td>
-                                  <td className='editIcon'> <BiEdit onClick={() => editBookInfo({data})}/></td>
+                                  <td className='editIcon'> 
+                                    <BiEdit fill='#102E46' className='me-3' onClick={() => editBookInfo({data})}/>
+                                    <BiTrash fill='#FF0100' onClick={() => {setShow(true); setDeleteData({ data })}} />
+                                  </td>
                                 </tr>
                               )
                           })}
@@ -146,6 +164,17 @@ function Dashboard(){
                 </Container>
               </Col>
             </Row>
+            <Modal show={showDelete} onHide={() => setShow(false)} centered aria-labelledby="deleteModal">
+              <Modal.Header closeButton>
+              <Modal.Title id="deleteModal">
+                  Are you sure to delete this story?
+              </Modal.Title>
+              </Modal.Header> 
+              <Modal.Footer>
+                  <Button variant="danger"   onClick={() => setShow(false)}> No </Button>
+                  <Button variant="success"  onClick={() => deleteBookInfo()}> Yes</Button>
+              </Modal.Footer>
+          </Modal>
         </Container> 
     ) : (
           <Loading />
