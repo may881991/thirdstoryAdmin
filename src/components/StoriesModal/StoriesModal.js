@@ -11,7 +11,7 @@ const CreateStories = (props) => {
     const date = `${current.getMonth()+1}/${current.getDate()}/${current.getFullYear()}`;
 
     const createStorytoDb = () => {
-        createStory(storyTitle, storyLink, date ).then((res) => { 
+        createStory(storyTitle, "https://www.youtube.com/embed/" + storyLink, date ).then((res) => { 
             console.log(res);
             handleClose(); 
             window.location.reload();
@@ -46,7 +46,7 @@ const CreateStories = (props) => {
                         {props.status === "edit" ? (
                             <Form.Control className='col-md-8' type="text" placeholder="Enter Story Link" defaultValue={storyInfo.url} onChange={e => setLink(e.target.value)}/>
                         ) : (
-                            <Form.Control className='col-md-8' type="text" placeholder="Enter Story Link" onChange={e => setLink(e.target.value)}/>
+                            <Form.Control className='col-md-8' type="text" placeholder="Enter Story Link" onChange={e => setLink(e.target.value.split("=")[1])}/>
                         )}
                     </Form.Group>
                 </Form>
