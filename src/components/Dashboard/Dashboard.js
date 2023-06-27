@@ -27,8 +27,8 @@ function Dashboard(){
       var arrBook = [];
       lists.forEach((ele) => {  
         arrBook.push(ele.data()); 
-      });
-      getData(arrBook);
+      }); 
+      getData(arrBook.sort(function(a, b) { return new Date(b.date) - new Date(a.date) }));
       setLoading(false);
     }).catch((err) => console.log(err));
   }, []);
