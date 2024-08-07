@@ -111,7 +111,7 @@ const addBookData = async (booktTitle, bookEngTitle, author, authorEng, illust ,
 }
 
 const updateBookInfo = async (bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , upprice, isbn, lang, updatedDate ) => {
-  console.log(bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , upprice, isbn, lang, updatedDate)
+ alert(bookId, booktTitle, bookEngTitle, author, authorEng, illust ,illustEng , upprice, isbn, lang, updatedDate)
   try{
     const bookDb = query(collection(db, "books"), where("id", "==", bookId));
     const getData =  await getDocs(bookDb);
