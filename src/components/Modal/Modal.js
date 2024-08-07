@@ -62,7 +62,6 @@ const Create = (props) => {
         let upLang = bookLang === "" ? bookInfo.language : bookLang;
         updateBookInfo(bookInfo.id, uptitle, upEngtitle,  upAuthor, upEngAuthor, upIllustrator, upEngIllustrator, upPrice, upISBN, upLang, date);
         handleClose(); 
-        window.location.reload();
     }
 
     return(
