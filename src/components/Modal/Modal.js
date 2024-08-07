@@ -50,7 +50,7 @@ const Create = (props) => {
         }); 
     }
 
-    const updatebookInfo = () => { 
+    const updatebookInfoData = () => { 
         let uptitle = booktitle === "" ? bookInfo.title : booktitle;
         let upEngtitle = bookEngtitle === "" ? bookInfo.titleEng : bookEngtitle; 
         let upAuthor = bookauthor === "" ? bookInfo.author : bookauthor; 
@@ -172,7 +172,7 @@ const Create = (props) => {
             </Modal.Body>
             <Modal.Footer>
                     {props.status === "edit" ? (
-                        <Button variant="primary" onClick={updatebookInfo}> Update Book </Button>
+                        <Button variant="primary" onClick={updatebookInfoData}> Update Book </Button>
                     ) : (
                         <Button variant="primary" onClick={createBook}> Create Book </Button>
                     )}
