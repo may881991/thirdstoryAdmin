@@ -265,7 +265,7 @@ const updateStory = async (storyId ,title, url, date) => {
       const actDoc = doc(db, "stories", ele.id);
       updateDoc(actDoc, { 
         title: title,
-        description : url,
+        url : url,
         date : date
       }).then(() => {
         console.log("updated activity Info");
